@@ -8,7 +8,7 @@ import OrderProduct from '../app/models/OrderProduct';
 
 import databaseConfig from '../config/database';
 
-const models = [User];
+const models = [User, Product, Client, Order, OrderProduct];
 
 class Database {
   constructor() {

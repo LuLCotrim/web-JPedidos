@@ -21,6 +21,7 @@ class UserController {
         error: 'Unauthorized, only administrators can complete this action!',
       });
     }
+
     if (!(await schema.isValid(req.body))) {
       return res.status(400).json({ error: 'Validation fails' });
     }
@@ -36,6 +37,14 @@ class UserController {
   }
 
   async index(req, res) {
+    const userType = await User.findByPk(req.userId);
+
+    if (userType.type !== 'administrador') {
+      return res.status(401).json({
+        error: 'Unauthorized, only administrators can complete this action!',
+      });
+    }
+
     const users = await User.findAll({
       attributes: ['id', 'login', 'name', 'email', 'type'],
     });
@@ -50,6 +59,14 @@ class UserController {
       email: Yup.string().email(),
       type: Yup.string(),
     });
+
+    const userType = await User.findByPk(req.userId);
+
+    if (userType.type !== 'administrador') {
+      return res.status(401).json({
+        error: 'Unauthorized, only administrators can complete this action!',
+      });
+    }
 
     if (!(await schema.isValid(req.body))) {
       return res.status(400).json({ error: 'Validation fails' });
@@ -81,6 +98,14 @@ class UserController {
   }
 
   async delete(req, res) {
+    const userType = await User.findByPk(req.userId);
+
+    if (userType.type !== 'administrador') {
+      return res.status(401).json({
+        error: 'Unauthorized, only administrators can complete this action!',
+      });
+    }
+
     const user = await User.findByPk(req.params.id);
 
     const { id, name } = await user.destroy();
