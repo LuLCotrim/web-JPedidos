@@ -14,14 +14,15 @@ class UserController {
         .required()
         .min(6),
     });
+    /*
     const userType = await User.findByPk(req.userId);
-
+    
     if (userType.type !== 'administrador') {
       return res.status(401).json({
         error: 'Unauthorized, only administrators can complete this action!',
       });
     }
-
+    */
     if (!(await schema.isValid(req.body))) {
       return res.status(400).json({ error: 'Validation fails' });
     }

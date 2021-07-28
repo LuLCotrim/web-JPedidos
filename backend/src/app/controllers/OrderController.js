@@ -11,8 +11,6 @@ class OrderController {
       status: Yup.string().required(),
       user_id: Yup.number().required(),
       client_id: Yup.number().required(),
-      quantity: Yup.number().required(),
-      order_id: Yup.number().required(),
       total: Yup.number().required(),
     });
     const userType = await User.findByPk(req.userId);
@@ -27,7 +25,12 @@ class OrderController {
       return res.status(400).json({ error: 'Validation fails' });
     }
 
-    const { id, total } = await Order.create(req.body);
+    const { id, total } = await Order.create({
+      status: req.body.status,
+      user_id: req.body.user_id,
+      client_id: req.body.cliente_id,
+      total: req.body.total,
+    });
 
     req.body.product_id.map(async body_product => {
       await OrderProduct.create({
@@ -43,7 +46,7 @@ class OrderController {
   async index(req, res) {
     const userType = await User.findByPk(req.userId);
 
-    if (userType.type !== 'gerente' || userType.type !== 'funcionario') {
+    if (userType.type !== 'gerente' && userType.type !== 'funcionario') {
       return res.status(401).json({
         error: 'Unauthorized, you can not complete this action!',
       });
@@ -55,7 +58,7 @@ class OrderController {
         {
           model: Order,
           as: 'order',
-          attributes: ['id', 'total'],
+          attributes: ['id', 'total', 'status'],
         },
         {
           model: Product,
@@ -76,9 +79,9 @@ class OrderController {
 
     const userType = await User.findByPk(req.userId);
 
-    if (userType.type !== 'gerente') {
+    if (userType.type !== 'gerente' && userType.type !== 'funcionario') {
       return res.status(401).json({
-        error: 'Unauthorized, only managers can complete this action!',
+        error: 'Unauthorized, you can not complete this action!',
       });
     }
 
@@ -90,7 +93,7 @@ class OrderController {
 
     await order.update(req.body);
 
-    const { id, status } = await Product.findByPk(req.params.id);
+    const { id, status } = await Order.findByPk(req.params.id);
 
     return res.json({
       id,

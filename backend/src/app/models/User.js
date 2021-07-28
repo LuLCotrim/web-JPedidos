@@ -10,7 +10,7 @@ class User extends Model {
         email: Sequelize.STRING,
         password: Sequelize.VIRTUAL,
         password_hash: Sequelize.STRING,
-        type: Sequelize.ENUM('administrador', 'gerente', 'funcionario'),
+        type: Sequelize.ENUM('administrador', 'gerente', '"funcionario"'),
       },
       {
         sequelize,
