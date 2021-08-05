@@ -5,6 +5,7 @@ import * as Yup from 'yup';
 
 import { signInRequest } from '../../store/modules/auth/actions';
 
+import {Container, Content} from './styles'
 
 const schema = Yup.object().shape({
   login: Yup.string()
@@ -21,18 +22,20 @@ export default function SignIn() {
   }
 
   return (
-    <>
+    <Container>
 
-      <Form schema={schema} onSubmit={handleSubmit}>
-        <Input name="login" type="login" placeholder="Seu login" />
-        <Input
-          name="password"
-          type="password"
-          placeholder="Sua senha secreta"
-        />
+      <Content>
+        <Form schema={schema} onSubmit={handleSubmit}>
+          <Input name="login" type="login" placeholder="Seu login" />
+          <Input
+            name="password"
+            type="password"
+            placeholder="Sua senha secreta"
+          />
 
-        <button type="submit">{loading ? 'Carregando...' : 'Acessar'}</button>
-      </Form>
-    </>
+          <button type="submit">{loading ? 'Carregando...' : 'Acessar'}</button>
+        </Form>
+      </Content>
+    </ Container>
   );
 }
